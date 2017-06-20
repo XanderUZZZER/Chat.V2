@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0521D436-514D-441A-B013-5370A06BD8AE}</ProjectGuid>
+    <ProjectGuid>{2EF9A9DB-2839-425F-8DEA-18CF393E6368}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChatClient</RootNamespace>
-    <AssemblyName>ChatClient</AssemblyName>
+    <RootNamespace>ChatServer</RootNamespace>
+    <AssemblyName>ChatServer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,17 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="ClientMainForm.cs">
+    <Compile Include="ServerConnectedClient.cs" />
+    <Compile Include="Requests.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ClientMainForm.Designer.cs">
-      <DependentUpon>ClientMainForm.cs</DependentUpon>
+    <Compile Include="ServerMainForm.Designer.cs">
+      <DependentUpon>ServerMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ClientMainForm.resx">
-      <DependentUpon>ClientMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="ServerMainForm.resx">
+      <DependentUpon>ServerMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -79,12 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChatServer\ChatServer.csproj">
-      <Project>{2EF9A9DB-2839-425F-8DEA-18CF393E6368}</Project>
-      <Name>ChatServer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
