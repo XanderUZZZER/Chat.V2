@@ -12,11 +12,15 @@ using System.Threading.Tasks;
 
 namespace ChatClient
 {
-    public class Client : ClientBase
+    public class Client
     {
-        public Client() : base(new TcpClient())
+        private TcpClient client;
+        private BinaryWriter writer;
+        private BinaryReader reader;
+
+        public Client()
         {
-            Registerhandler<MessageRequest>(Requests.Message, m => MessageReceived?.Invoke(m));
+            client = new TcpClient();
         }
 
         public bool Start(IPAddress address)
@@ -27,7 +31,7 @@ namespace ChatClient
                 var stream = client.GetStream();
                 writer = new BinaryWriter(stream);
                 reader = new BinaryReader(stream);
-                new Thread(WorkWithClient).Start();
+                new Thread(ClientProc).Start();
                 return (Requests)reader.ReadInt32() == Requests.ConnectionOk;
             }
             catch (Exception ex)
@@ -37,6 +41,22 @@ namespace ChatClient
             }            
         }
 
+        private void ClientProc()
+        {
+            while (true)
+            {
+                switch ((Requests)reader.ReadInt32())
+                {
+                    case Requests.Message:
+                        {
+                            string message = reader.ReadString();
+                            MessageReceived?.Invoke(message);
+                            break;
+                        }
+                }
+            }
+        }
+
         public void SendMessage(string message)
         {
             writer.Write((int)Requests.Message);
@@ -44,6 +64,6 @@ namespace ChatClient
             writer.Flush();
         }
 
-        public event Action<MessageRequest> MessageReceived;
+        public event Action<string> MessageReceived;
     }
 }

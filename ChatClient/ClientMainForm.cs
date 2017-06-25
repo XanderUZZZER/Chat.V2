@@ -1,5 +1,4 @@
-﻿using ChatServer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,11 +22,11 @@ namespace ChatClient
             client.MessageReceived += Client_MessageReceived;
         }
 
-        private void Client_MessageReceived(MessageRequest obj)
+        private void Client_MessageReceived(string obj)
         {
             BeginInvoke(new Action(() =>
                                     {
-                                        tbChat.AppendText("\r\n" + obj.User + "|" + obj.Message);
+                                        tbChat.AppendText("\r\n" + obj);
                                     }), 
                         new object[0]);
         }

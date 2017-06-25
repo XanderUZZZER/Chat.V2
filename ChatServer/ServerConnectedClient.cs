@@ -9,39 +9,23 @@ using System.Threading.Tasks;
 
 namespace ChatServer
 {
-    public class MessageRequest
+    class ServerConnectedClient
     {
-        public string Message { get; set; }
-        public string User { get; set; }
-    }
-
-    
-
-    
-    class ServerConnectedClient : ClientBase
-    {
+        private TcpClient client;
         private Server server;
+        private BinaryReader reader;
+        private BinaryWriter writer;
 
-        public ServerConnectedClient(Server server, TcpClient client) : base (client)
+        public ServerConnectedClient(Server server, TcpClient client)
         {
             this.server = server;
             this.client = client;
-            Registerhandler<MessageRequest>(Requests.Message, ProcessMessage);
-        }
-
-        private void ProcessMessage(MessageRequest request)
-        {
-            foreach (var clnt in server.Clients)
-            {
-                clnt.SendMessage(request.User, request.Message);
-            }
         }
 
         public void Start()
         {
             new Thread(() => ClientProc(client)).Start();
         }
-
         private void ClientProc(TcpClient client)
         {
             using (client)
@@ -52,13 +36,26 @@ namespace ChatServer
                     reader = new BinaryReader(stream);
                     writer.Write((int)Requests.ConnectionOk);
                     writer.Flush();
-WorkWithClient();
-                    
+                    while (true)
+                    {
+                        switch ((Requests)reader.ReadInt32())
+                        {
+                            case Requests.Message:
+                                {
+                                    string message = reader.ReadString();
+                                    foreach (var clt in server.Clients)
+                                    {
+                                        clt.SendMessage(message);
+                                    }
+                                    break;
+                                }
+                        }
+                    }
                 }
             }
-        }        
+        }
 
-        private void SendMessage(string login, string message)
+        private void SendMessage(string message)
         {
             writer.Write((int)Requests.Message);
             writer.Write(message);
