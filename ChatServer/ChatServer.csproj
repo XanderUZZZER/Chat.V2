@@ -46,9 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServerConnectedClient.cs" />
+    <Compile Include="ClientBase.cs" />
     <Compile Include="Requests.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="ServerConnectedClient.cs" />
     <Compile Include="ServerMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
